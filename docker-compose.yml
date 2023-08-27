@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: postgres-strapi
+    image: postgres:14.8
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - strapi-network
+    ports:
+      - "5433:${DATABASE_PORT}"
+  app:
+    container_name: strapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: strapi:latest
+    command: npm run develop
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - postgres
+    volumes:
+      - .:/strapi
+      - public:/strapi/app/public/uploads
+    networks:
+      - strapi-network
+    ports:
+      - "1337:${SERVER_PORT}"
+
+volumes:
+  .:
+  public:
+  postgres_data:
+
+networks:
+  strapi-network:
+    driver: bridge
