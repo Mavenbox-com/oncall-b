@@ -1,27 +1,45 @@
-FROM node:16.20.2
+ARG IMAGE
+ARG TAG
 
-RUN apt-get update && apt-get install -y build-essential gcc autoconf automake zlib1g-dev libpng-dev nasm bash libvips-dev
+# Primera etapa
+FROM ${IMAGE}:${TAG} as BUILD
 
-ARG NODE_ENV=development
+RUN apk update && apk add --no-cache \
+    build-base gcc autoconf automake zlib-dev \
+    libpng-dev nasm bash vips-dev
 
-ENV NODE_ENV=${NODE_ENV}
+ARG ENVIROMENT
+ENV NODE_ENV=${ENVIROMENT}
 
-RUN mkdir /strapi
+WORKDIR /opt/
 
-ENV APP_DIR=/strapi
+COPY package.json ./
 
-WORKDIR ${APP_DIR}
+RUN yarn install
 
-COPY package.json /strapi/
+ENV PATH /opt/node_modules/.bin:$PATH
 
-RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install
+WORKDIR /opt/app
 
-ENV PATH /strapi/node_modules/.bin:$PATH
+COPY . .
 
-COPY . /strapi/
+RUN chown -R node:node /opt/app
 
-RUN ["npm", "run", "build"]
+USER node
+
+RUN ["yarn", "build"]
+
+#Segunda etapa
+FROM ${IMAGE}:${TAG} as development
+
+WORKDIR /opt/app
+
+COPY package*.json ./
+
+RUN yarn install --only=development
+
+COPY --from=BUILD /opt/app/ /opt/app/
 
 EXPOSE 1337
 
-CMD ["npm", "run", "develop"]
+CMD ["yarn", "develop"]
