@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: postgres-strapi
+    image: postgres:12.0-alpine
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - strapi-network
+  app:
+    container_name: strapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - IMAGE=${IMAGE}
+        - TAG=${TAG}
+        - ENVIROMENT=${ENVIROMENT}
+    image: strapi:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - DATABASE_CLIENT=${DATABASE_CLIENT}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
+      - APP_KEYS=${APP_KEYS}
+      - NODE_ENV=${ENVIROMENT}
+    volumes:
+      - ./config:/opt/app/config
+      - ./src:/opt/app/src
+      - ./package.json:/opt/package.json
+      - ./yarn.lock:/opt/yarn.lock
+      - ./.env:/opt/app/.env
+      - ./public/uploads:/opt/app/public/uploads
+    ports:
+      - "1337:1337"
+    networks:
+      - strapi-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+
+
+networks:
+  strapi-network:
+    driver: bridge
