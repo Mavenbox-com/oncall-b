@@ -39,6 +39,10 @@ services:
       - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
       - APP_KEYS=${APP_KEYS}
       - NODE_ENV=${ENVIROMENT}
+      - CLOUDINARY_NAME=${CLOUDINARY_NAME}
+      - CLOUDINARY_KEY=${CLOUDINARY_KEY}
+      - CLOUDINARY_SECRET=${CLOUDINARY_SECRET}
+      - CLOUDINARY_FOLDER=${CLOUDINARY_FOLDER}
     volumes:
       - ./config:/opt/app/config
       - ./src:/opt/app/src
@@ -55,7 +59,6 @@ services:
 
 volumes:
   postgres_data:
-
 
 networks:
   strapi-network:
