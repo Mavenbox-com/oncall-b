@@ -12,6 +12,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@creazy231/strapi-plugin-apollo-sandbox": "^0.0.13",
+    "@strapi/plugin-graphql": "^4.13.1",
     "@strapi/plugin-i18n": "4.12.6",
     "@strapi/plugin-users-permissions": "4.12.6",
     "@strapi/provider-upload-cloudinary": "^4.12.7",
