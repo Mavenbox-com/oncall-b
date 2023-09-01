@@ -33,7 +33,7 @@
     ],
     "prefer-const": "error",
     "no-console": "error",
-    //"no-unused-vars": "error",
+    "no-unused-vars": "error",
     "no-undef": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/quotes": [
