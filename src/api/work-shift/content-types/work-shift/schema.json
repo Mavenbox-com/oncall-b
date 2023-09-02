@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "work_shifts",
+  "info": {
+    "singularName": "work-shift",
+    "pluralName": "work-shifts",
+    "displayName": "Work shift"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "external_id": {
+      "type": "string",
+      "configurable": false
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 50,
+      "required": true
+    },
+    "start_time": {
+      "type": "time",
+      "required": true
+    },
+    "end_time": {
+      "type": "time",
+      "required": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "hooks": {
+    "beforeCreate": "lifecycles.beforeCreate",
+    "beforeUpdate": "lifecycles.beforeUpdate"
+  }
+}

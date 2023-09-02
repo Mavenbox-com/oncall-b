@@ -1,0 +1,69 @@
+{
+  "kind": "collectionType",
+  "collectionName": "incidences",
+  "info": {
+    "singularName": "incidence",
+    "pluralName": "incidences",
+    "displayName": "Incidence"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "external_id": {
+      "type": "string",
+      "configurable": false
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 250,
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500,
+      "required": true
+    },
+    "priority": {
+      "type": "string",
+      "default": "P3",
+      "maxLength": 2,
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "maxLength": 250,
+      "required": true
+    },
+    "slack": {
+      "type": "string",
+      "maxLength": 250,
+      "required": true
+    },
+    "alerts": {
+      "type": "integer",
+      "default": 0,
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "required": true,
+      "comment": "Proviene del Item Catalogo - Padre: Catalogo Errores"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "merchant": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::merchant.merchant",
+      "required": true
+    }
+  },
+  "hooks": {
+    "beforeCreate": "lifecycles.beforeCreate",
+    "beforeUpdate": "lifecycles.beforeUpdate"
+  }
+}
