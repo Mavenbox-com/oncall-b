@@ -33,6 +33,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@strapi/plugin-documentation": "^4.13.2",
     "@types/jest": "^29.5.4",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",

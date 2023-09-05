@@ -60,6 +60,16 @@
       "relation": "oneToOne",
       "target": "api::merchant.merchant",
       "required": true
+    },
+    "attachments": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
     }
   },
   "hooks": {

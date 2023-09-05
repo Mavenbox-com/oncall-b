@@ -48,9 +48,5 @@
       "relation": "oneToOne",
       "target": "api::catalog.catalog"
     }
-  },
-  "hooks": {
-    "beforeCreate": "lifecycles.beforeCreate",
-    "beforeUpdate": "lifecycles.beforeUpdate"
   }
 }

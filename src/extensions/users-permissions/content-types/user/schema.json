@@ -79,6 +79,13 @@
       "type": "string",
       "minLength": 3,
       "comment": "Position - Catalogo Cargos"
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }
