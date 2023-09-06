@@ -86,6 +86,12 @@
       ],
       "type": "media",
       "multiple": false
+    },
+    "incidences": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::incidence.incidence",
+      "mappedBy": "report_by"
     }
   }
 }

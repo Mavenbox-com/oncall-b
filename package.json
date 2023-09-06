@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@creazy231/strapi-plugin-apollo-sandbox": "^0.0.13",
+    "@strapi/plugin-documentation": "^4.13.3",
     "@strapi/plugin-graphql": "^4.13.1",
     "@strapi/plugin-i18n": "4.12.6",
     "@strapi/plugin-users-permissions": "4.12.6",
@@ -33,7 +34,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@strapi/plugin-documentation": "^4.13.2",
     "@types/jest": "^29.5.4",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",

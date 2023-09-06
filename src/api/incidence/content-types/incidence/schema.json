@@ -4,7 +4,8 @@
   "info": {
     "singularName": "incidence",
     "pluralName": "incidences",
-    "displayName": "Incidence"
+    "displayName": "Incidence",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -62,14 +63,27 @@
       "required": true
     },
     "attachments": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
+    },
+    "report_by": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "incidences"
+    },
+    "tasks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::task.task",
+      "mappedBy": "incident"
     }
   },
   "hooks": {
