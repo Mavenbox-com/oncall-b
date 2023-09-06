@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "catalogs",
+  "info": {
+    "singularName": "catalog",
+    "pluralName": "catalogs",
+    "displayName": "Catalog",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "external_id": {
+      "type": "string",
+      "configurable": false
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 250,
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "unique": true,
+      "maxLength": 50,
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 250,
+      "required": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "order": {
+      "type": "integer"
+    },
+    "version": {
+      "type": "integer",
+      "default": 1
+    },
+    "father": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::catalog.catalog"
+    },
+    "item_catalogs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::item-catalog.item-catalog",
+      "mappedBy": "catalog"
+    }
+  },
+  "hooks": {
+    "beforeCreate": "lifecycles.beforeCreate",
+    "beforeUpdate": "lifecycles.beforeUpdate"
+  }
+}

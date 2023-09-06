@@ -32,6 +32,18 @@ npm run build
 yarn build
 ```
 
+### `Documentation`
+
+Abre tu navegador web y visita la siguiente URL:
+
+```
+http://localhost:1337/documentation
+
+```
+Esto te llevará a la documentación de tu API generada automáticamente por Strapi.
+
+
+
 ## ⚙️ Deployment
 
 Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
@@ -53,5 +65,26 @@ Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/
 - [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
 
 ---
+
+## Cómo crear una imagen de Docker y acceder a la documentación
+
+A continuación, se describen los pasos para crear una imagen de Docker de tu proyecto y cómo acceder a la documentación.
+
+### Crear una imagen de Docker
+
+1. Asegúrate de que Docker esté instalado en tu sistema.
+
+2. Abre una terminal y navega hasta la raíz de tu proyecto.
+
+3. Crea una imagen de Docker ejecutando el siguiente comando:
+
+```bash
+   docker compose -f docker-compose.yml
+```
+
+4. Ejecuta el contenedor
+```bash
+   docker compose up -d
+```
 
 <sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
