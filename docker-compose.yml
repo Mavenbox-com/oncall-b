@@ -5,7 +5,6 @@ services:
     container_name: postgres-strapi
     image: postgres:12.0-alpine
     restart: unless-stopped
-    env_file: .env
     environment:
       - POSTGRES_DB=${DATABASE_NAME}
       - POSTGRES_USER=${DATABASE_USERNAME}
@@ -25,9 +24,7 @@ services:
         - IMAGE=${IMAGE}
         - TAG=${TAG}
         - ENVIROMENT=${ENVIROMENT}
-    image: strapi:latest
     restart: unless-stopped
-    env_file: .env
     environment:
       - DATABASE_CLIENT=${DATABASE_CLIENT}
       - DATABASE_HOST=${DATABASE_HOST}
@@ -38,6 +35,8 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
       - APP_KEYS=${APP_KEYS}
+      - API_TOKEN_SALT=${API_TOKEN_SALT}
+      - TRANSFER_TOKEN_SALT=${TRANSFER_TOKEN_SALT}
       - NODE_ENV=${ENVIROMENT}
       - CLOUDINARY_NAME=${CLOUDINARY_NAME}
       - CLOUDINARY_KEY=${CLOUDINARY_KEY}
@@ -48,7 +47,6 @@ services:
       - ./src:/opt/app/src
       - ./package.json:/opt/package.json
       - ./yarn.lock:/opt/yarn.lock
-      - ./.env:/opt/app/.env
       - ./public/uploads:/opt/app/public/uploads
     ports:
       - "1337:1337"
