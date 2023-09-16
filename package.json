@@ -15,11 +15,12 @@
   "dependencies": {
     "@creazy231/strapi-plugin-apollo-sandbox": "^0.0.13",
     "@strapi/plugin-documentation": "^4.13.3",
-    "@strapi/plugin-graphql": "^4.13.1",
+    "@strapi/plugin-graphql": "4.12.6",
     "@strapi/plugin-i18n": "4.12.6",
     "@strapi/plugin-users-permissions": "4.12.6",
     "@strapi/provider-upload-cloudinary": "^4.12.7",
     "@strapi/strapi": "4.12.6",
+    "husky": "^8.0.3",
     "pg": "^8.8.0"
   },
   "author": {
@@ -38,7 +39,6 @@
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "eslint": "^8.48.0",
-    "husky": "^8.0.3",
     "jest": "^29.6.4",
     "lint-staged": "^14.0.1",
     "ts-jest": "^29.1.1",

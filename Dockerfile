@@ -4,42 +4,81 @@ ARG TAG
 # Primera etapa
 FROM ${IMAGE}:${TAG} as BUILD
 
-RUN apk update && apk add --no-cache \
-    build-base gcc autoconf automake zlib-dev \
-    libpng-dev nasm bash vips-dev
-
 ARG ENVIROMENT
 ENV NODE_ENV=${ENVIROMENT}
 
-WORKDIR /opt/
+WORKDIR /app
 
-COPY package.json ./
+# Install dependencies
+COPY package*.json ./
 
 RUN yarn install
 
-ENV PATH /opt/node_modules/.bin:$PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
-WORKDIR /opt/app
-
+# Copy Files
 COPY . .
-
-RUN chown -R node:node /opt/app
-
-USER node
 
 RUN ["yarn", "build"]
 
-#Segunda etapa
-FROM ${IMAGE}:${TAG} as development
+# ------RELEASE-------
+FROM ${IMAGE}:${TAG} as RELEASE
 
-WORKDIR /opt/app
+# ARG
+ARG APP_KEYS
+ARG API_TOKEN_SALT
+ARG ADMIN_JWT_SECRET
+ARG TRANSFER_TOKEN_SALT
+# Database
+ARG DATABASE_CLIENT
+ARG DATABASE_HOST
+ARG DATABASE_PORT
+ARG DATABASE_NAME
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
+ARG DATABASE_SSL
+ARG JWT_SECRET
+# Cloudinary
+ARG CLOUDINARY_NAME
+ARG CLOUDINARY_SECRET
+ARG CLOUDINARY_KEY
 
-COPY package*.json ./
+# dir working
+WORKDIR /app
 
-RUN yarn install --only=development
+COPY --from=BUILD /app/node_modules ./node_modules
+COPY --from=BUILD /app/package.json ./package.json
+COPY --from=BUILD /app/yarn.lock ./yarn.lock
+COPY --from=BUILD /app/dist ./dist
+COPY --from=BUILD /app/src ./src
+COPY --from=BUILD /app/public ./public
+COPY --from=BUILD /app/database ./database
+COPY --from=BUILD /app/.strapi-updater.json ./.strapi-updater.json
+COPY --from=BUILD /app/favicon.png ./favicon.png
+COPY --from=BUILD /app/tsconfig.json ./tsconfig.json
 
-COPY --from=BUILD /opt/app/ /opt/app/
+# ENV
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=1337
+ENV APP_KEYS $APP_KEYS
+ENV API_TOKEN_SALT $API_TOKEN_SALT
+ENV ADMIN_JWT_SECRET $ADMIN_JWT_SECRET
+ENV TRANSFER_TOKEN_SALT $TRANSFER_TOKEN_SALT
+# Database
+ENV DATABASE_CLIENT $DATABASE_CLIENT
+ENV DATABASE_HOST $DATABASE_HOST
+ENV DATABASE_PORT $DATABASE_PORT
+ENV DATABASE_NAME $DATABASE_NAME
+ENV DATABASE_USERNAME $DATABASE_USERNAME
+ENV DATABASE_PASSWORD $DATABASE_PASSWORD
+ENV DATABASE_SSL $DATABASE_SSL
+ENV JWT_SECRET $JWT_SECRET
+# Cloudinary
+ENV CLOUDINARY_NAME $CLOUDINARY_NAME
+ENV CLOUDINARY_SECRET $CLOUDINARY_SECRET
+ENV CLOUDINARY_KEY $CLOUDINARY_KEY
 
+# Run it!
 EXPOSE 1337
-
-CMD ["yarn", "develop"]
+CMD [ "npm", "run", "start" ]

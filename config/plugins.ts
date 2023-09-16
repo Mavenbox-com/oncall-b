@@ -28,7 +28,7 @@ export default ({ env }) => ({
     config: {
       endpoint: '/graphql',
       shadowCRUD: true,
-      playgroundAlways: env('ENVIROMENT') === 'production' ? false : true,
+      playgroundAlways: false,
       depthLimit: 7,
       amountLimit: 100,
       apolloServer: {
@@ -36,11 +36,11 @@ export default ({ env }) => ({
       },
     },
   },
-  'apollo-sandbox': {
-    // enables the plugin only in development mode
-    // if you also want to use it in production, set this to true
-    // keep in mind that graphql playground has to be enabled
-    enabled: env('ENVIROMENT') === 'production' ? false : true,
-    // endpoint: "https://tunneled-strapi.com/graphql", // OPTIONAL - endpoint has to be accessible from the browser
-  },
+  // 'apollo-sandbox': {
+  //   // enables the plugin only in development mode
+  //   // if you also want to use it in production, set this to true
+  //   // keep in mind that graphql playground has to be enabled
+  //   enabled: env('ENVIROMENT') === 'production' ? false : true,
+  //   // endpoint: "https://tunneled-strapi.com/graphql", // OPTIONAL - endpoint has to be accessible from the browser
+  // },
 });
