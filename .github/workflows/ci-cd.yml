@@ -2,11 +2,21 @@ name: CI/CD
 
 on:
   push:
-    branches: [ "master" , "development" ]
+    branches: [ "master"]
   pull_request:
     branches: [ "development" ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the environment to deploy to'
+        required: true
+        default: 'PROD'
+        options:
+        - 'STAGING'
+        - 'PROD'
 
 jobs:
+
   eslint:
     name: Run ESLint
     runs-on: ubuntu-latest
@@ -31,35 +41,13 @@ jobs:
     - name: Run ESLint
       run: npm run lint
     
-  build:
-    name: Build
+  docker_build:
+
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
+    name: Build and Publish Docker Image ${{ github.event.inputs.environment || 'STAGING' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
     needs: eslint
-    if: github.event_name == 'push'
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm install
-    
-    - name: Build
-      run: npm run build
-
-  docker_build_publish:
-    name: Build and Publish Docker Image
-    runs-on: ubuntu-latest
-    needs: build 
+    environment: ${{ github.event.inputs.environment || 'STAGING' }}
 
     steps:
     - name: Checkout code
@@ -78,6 +66,17 @@ jobs:
       uses: docker/build-push-action@v4
       with:
           context: .
+          build-args: |
+            IMAGE=${{ vars.IMAGE }}
+            TAG=${{ vars.TAG }}
+            ENVIROMENT=${{ vars.ENVIROMENT }}
+
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/oncall-b
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.REPO_NAME}}:latest-${{ vars.NAME_VERSION }}
+
+    - name: Deploying to Render.com
+      env:
+        deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      run: |
+        curl "$deploy_url"
