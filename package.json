@@ -8,7 +8,7 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "postinstall": "husky install",
+    "postinstall": "if [ \"$NODE_ENV\" = \"development\" ]; then husky install; fi",
     "test": "jest",
     "lint": "eslint . --ext .ts"
   },

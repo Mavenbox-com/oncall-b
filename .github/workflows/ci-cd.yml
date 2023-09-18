@@ -2,11 +2,21 @@ name: CI/CD
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master"]
   pull_request:
     branches: [ "development" ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the environment to deploy to'
+        required: true
+        default: 'PROD'
+        options:
+        - 'STAGING'
+        - 'PROD'
 
 jobs:
+
   eslint:
     name: Run ESLint
     runs-on: ubuntu-latest
@@ -31,35 +41,13 @@ jobs:
     - name: Run ESLint
       run: npm run lint
     
-  build:
-    name: Build
+  docker_build:
+
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
+    name: Build and Publish Docker Image ${{ github.event.inputs.environment || 'STAGING' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
     needs: eslint
-    if: github.ref == 'refs/heads/master'
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm install
-    
-    - name: Build
-      run: npm run build
-
-  docker_build_publish:
-    name: Build and Publish Docker Image
-    runs-on: ubuntu-latest
-    needs: build 
+    environment: ${{ github.event.inputs.environment || 'STAGING' }}
 
     steps:
     - name: Checkout code
@@ -78,43 +66,17 @@ jobs:
       uses: docker/build-push-action@v4
       with:
           context: .
+          build-args: |
+            IMAGE=${{ vars.IMAGE }}
+            TAG=${{ vars.TAG }}
+            ENVIROMENT=${{ vars.ENVIROMENT }}
+
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/clockbox:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.REPO_NAME}}:latest-${{ vars.NAME_VERSION }}
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
+    - name: Deploying to Render.com
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-    - name: Fill in the new image ID in the Amazon ECS task definition
-      id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: ${{ env.ECS_TASK_DEFINITION }}
-        container-name: ${{ env.CONTAINER_NAME }}
-        image: ${{ steps.build-image.outputs.image }}
-
-    - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: ${{ env.ECS_SERVICE }}
-        cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true
+        curl "$deploy_url"
