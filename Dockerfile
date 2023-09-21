@@ -7,14 +7,16 @@ FROM ${IMAGE}:${TAG} as BUILD
 ARG ENVIROMENT
 ENV NODE_ENV=${ENVIROMENT}
 
-WORKDIR /app
+WORKDIR /opt
 
 # Install dependencies
 COPY package*.json ./
 
 RUN yarn install
 
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH /opt/node_modules/.bin:$PATH
+
+WORKDIR /opt/app
 
 # Copy Files
 COPY . .
@@ -44,18 +46,18 @@ ARG CLOUDINARY_SECRET
 ARG CLOUDINARY_KEY
 
 # dir working
-WORKDIR /app
+WORKDIR /opt/app
 
-COPY --from=BUILD /app/node_modules ./node_modules
-COPY --from=BUILD /app/package.json ./package.json
-COPY --from=BUILD /app/yarn.lock ./yarn.lock
-COPY --from=BUILD /app/dist ./dist
-COPY --from=BUILD /app/src ./src
-COPY --from=BUILD /app/public ./public
-COPY --from=BUILD /app/database ./database
-COPY --from=BUILD /app/.strapi-updater.json ./.strapi-updater.json
-COPY --from=BUILD /app/favicon.png ./favicon.png
-COPY --from=BUILD /app/tsconfig.json ./tsconfig.json
+COPY --from=BUILD /opt/node_modules ./node_modules
+COPY --from=BUILD /opt/package.json ./package.json
+COPY --from=BUILD /opt/yarn.lock ./yarn.lock
+COPY --from=BUILD /opt/app/dist ./dist
+COPY --from=BUILD /opt/app/src ./src
+COPY --from=BUILD /opt/app/public ./public
+COPY --from=BUILD /opt/app/database ./database
+COPY --from=BUILD /opt/app/.strapi-updater.json ./.strapi-updater.json
+COPY --from=BUILD /opt/app/favicon.png ./favicon.png
+COPY --from=BUILD /opt/app/tsconfig.json ./tsconfig.json
 
 # ENV
 ENV NODE_ENV=production
@@ -81,4 +83,4 @@ ENV CLOUDINARY_KEY $CLOUDINARY_KEY
 
 # Run it!
 EXPOSE 1337
-CMD [ "npm", "run", "start" ]
+CMD [ "yarn", "start" ]

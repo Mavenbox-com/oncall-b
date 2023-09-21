@@ -4,7 +4,8 @@
   "info": {
     "singularName": "employed-work-schedule",
     "pluralName": "employed-work-schedules",
-    "displayName": "Employed work schedule"
+    "displayName": "Employed work schedule",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -14,6 +15,18 @@
     "external_id": {
       "type": "string",
       "configurable": false
+    },
+    "is_holiday": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_day_off": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_changed": {
+      "type": "boolean",
+      "default": false
     },
     "employed": {
       "type": "relation",
@@ -26,18 +39,6 @@
       "relation": "oneToOne",
       "target": "api::work-shift.work-shift",
       "required": true
-    },
-    "is_holiday": {
-      "type": "time",
-      "default": false
-    },
-    "is_day_off": {
-      "type": "boolean",
-      "default": false
-    },
-    "is_changed": {
-      "type": "boolean",
-      "default": false
     }
   },
   "hooks": {
