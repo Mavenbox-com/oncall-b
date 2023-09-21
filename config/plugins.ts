@@ -39,7 +39,7 @@ export default ({ env }) => ({
   'import-export-entries': {
     enabled: true,
     config: {
-      serverPublicHostname: 'http://localhost:1337',
+      serverPublicHostname: `http://${env.HOST}:${env.PORT}`
     },
   },
   // 'apollo-sandbox': {
