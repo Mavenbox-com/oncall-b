@@ -32,16 +32,6 @@ npm run build
 yarn build
 ```
 
-### `Documentation`
-
-Abre tu navegador web y visita la siguiente URL:
-
-```
-http://localhost:1337/documentation
-
-```
-Esto te llevará a la documentación de tu API generada automáticamente por Strapi.
-
 
 
 ## ⚙️ Deployment

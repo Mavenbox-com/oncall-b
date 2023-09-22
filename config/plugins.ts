@@ -36,6 +36,12 @@ export default ({ env }) => ({
       },
     },
   },
+  'import-export-entries': {
+    enabled: true,
+    config: {
+      serverPublicHostname: `http://${env.HOST}:${env.PORT}`
+    },
+  },
   // 'apollo-sandbox': {
   //   // enables the plugin only in development mode
   //   // if you also want to use it in production, set this to true
