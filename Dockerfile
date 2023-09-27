@@ -1,0 +1,86 @@
+ARG IMAGE
+ARG TAG
+
+# Primera etapa
+FROM ${IMAGE}:${TAG} as BUILD
+
+ARG ENVIROMENT
+ENV NODE_ENV=${ENVIROMENT}
+
+WORKDIR /opt
+
+# Install dependencies
+COPY package*.json ./
+
+RUN yarn install
+
+ENV PATH /opt/node_modules/.bin:$PATH
+
+WORKDIR /opt/app
+
+# Copy Files
+COPY . .
+
+RUN ["yarn", "build"]
+
+# ------RELEASE-------
+FROM ${IMAGE}:${TAG} as RELEASE
+
+# ARG
+ARG APP_KEYS
+ARG API_TOKEN_SALT
+ARG ADMIN_JWT_SECRET
+ARG TRANSFER_TOKEN_SALT
+# Database
+ARG DATABASE_CLIENT
+ARG DATABASE_HOST
+ARG DATABASE_PORT
+ARG DATABASE_NAME
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
+ARG DATABASE_SSL
+ARG JWT_SECRET
+# Cloudinary
+ARG CLOUDINARY_NAME
+ARG CLOUDINARY_SECRET
+ARG CLOUDINARY_KEY
+
+# dir working
+WORKDIR /opt/app
+
+COPY --from=BUILD /opt/node_modules ./node_modules
+COPY --from=BUILD /opt/package.json ./package.json
+COPY --from=BUILD /opt/yarn.lock ./yarn.lock
+COPY --from=BUILD /opt/app/dist ./dist
+COPY --from=BUILD /opt/app/src ./src
+COPY --from=BUILD /opt/app/public ./public
+COPY --from=BUILD /opt/app/database ./database
+COPY --from=BUILD /opt/app/.strapi-updater.json ./.strapi-updater.json
+COPY --from=BUILD /opt/app/favicon.png ./favicon.png
+COPY --from=BUILD /opt/app/tsconfig.json ./tsconfig.json
+
+# ENV
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=1337
+ENV APP_KEYS $APP_KEYS
+ENV API_TOKEN_SALT $API_TOKEN_SALT
+ENV ADMIN_JWT_SECRET $ADMIN_JWT_SECRET
+ENV TRANSFER_TOKEN_SALT $TRANSFER_TOKEN_SALT
+# Database
+ENV DATABASE_CLIENT $DATABASE_CLIENT
+ENV DATABASE_HOST $DATABASE_HOST
+ENV DATABASE_PORT $DATABASE_PORT
+ENV DATABASE_NAME $DATABASE_NAME
+ENV DATABASE_USERNAME $DATABASE_USERNAME
+ENV DATABASE_PASSWORD $DATABASE_PASSWORD
+ENV DATABASE_SSL $DATABASE_SSL
+ENV JWT_SECRET $JWT_SECRET
+# Cloudinary
+ENV CLOUDINARY_NAME $CLOUDINARY_NAME
+ENV CLOUDINARY_SECRET $CLOUDINARY_SECRET
+ENV CLOUDINARY_KEY $CLOUDINARY_KEY
+
+# Run it!
+EXPOSE 1337
+CMD [ "yarn", "start" ]

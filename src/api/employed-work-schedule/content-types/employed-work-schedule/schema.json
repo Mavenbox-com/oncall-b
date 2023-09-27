@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "employed_work_schedules",
+  "info": {
+    "singularName": "employed-work-schedule",
+    "pluralName": "employed-work-schedules",
+    "displayName": "Employed work schedule",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "external_id": {
+      "type": "string",
+      "configurable": false
+    },
+    "is_holiday": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_day_off": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_changed": {
+      "type": "boolean",
+      "default": false
+    },
+    "employed": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "required": true
+    },
+    "shift": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::work-shift.work-shift",
+      "required": true
+    }
+  },
+  "hooks": {
+    "beforeCreate": "lifecycles.beforeCreate",
+    "beforeUpdate": "lifecycles.beforeUpdate"
+  }
+}

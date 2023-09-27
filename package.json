@@ -7,14 +7,21 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "postinstall": "if [ \"$NODE_ENV\" = \"development\" ]; then husky install; fi",
+    "test": "jest",
+    "lint": "eslint . --ext .ts"
   },
-  "devDependencies": {},
   "dependencies": {
-    "@strapi/strapi": "4.12.6",
-    "@strapi/plugin-users-permissions": "4.12.6",
+    "@creazy231/strapi-plugin-apollo-sandbox": "^0.0.13",
+    "@strapi/plugin-graphql": "4.12.6",
     "@strapi/plugin-i18n": "4.12.6",
-    "pg": "8.8.0"
+    "@strapi/plugin-users-permissions": "4.12.6",
+    "@strapi/provider-upload-cloudinary": "^4.12.7",
+    "@strapi/strapi": "4.12.6",
+    "husky": "^8.0.3",
+    "pg": "^8.8.0",
+    "strapi-plugin-import-export-entries": "^1.21.1"
   },
   "author": {
     "name": "A Strapi developer"
@@ -26,5 +33,15 @@
     "node": ">=16.0.0 <=20.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.4",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^8.48.0",
+    "jest": "^29.6.4",
+    "lint-staged": "^14.0.1",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  }
 }
