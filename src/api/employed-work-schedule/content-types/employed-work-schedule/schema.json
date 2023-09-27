@@ -16,6 +16,18 @@
       "type": "string",
       "configurable": false
     },
+    "is_holiday": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_day_off": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_changed": {
+      "type": "boolean",
+      "default": false
+    },
     "employed": {
       "type": "relation",
       "relation": "manyToOne",
@@ -26,24 +38,11 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::work-shift.work-shift",
-      "inversedBy": "employed_work_schedules"
-    },
-    "is_holiday": {
-      "type": "time"
-    },
-    "is_day_off": {
-      "type": "boolean",
-      "default": false
-    },
-    "is_changed": {
-      "type": "boolean",
-      "default": false
-    },
-    "schedule": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::work-schedule.work-schedule",
-      "inversedBy": "employed_work_schedules"
+      "required": true
     }
+  },
+  "hooks": {
+    "beforeCreate": "lifecycles.beforeCreate",
+    "beforeUpdate": "lifecycles.beforeUpdate"
   }
 }

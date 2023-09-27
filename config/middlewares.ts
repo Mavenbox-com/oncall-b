@@ -35,7 +35,15 @@ export default [
   'strapi::poweredBy',
   'strapi::logger',
   'strapi::query',
-  'strapi::body',
+  {
+    name: 'strapi::body',
+    config: {
+      jsonLimit: '10mb',
+      formLimit: '10mb',
+      textLimit: '256kb',
+      encoding: 'utf8',
+    }
+  },
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
