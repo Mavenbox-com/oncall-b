@@ -92,6 +92,12 @@
       "relation": "oneToMany",
       "target": "api::incidence.incidence",
       "mappedBy": "report_by"
+    },
+    "employed_work_schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::employed-work-schedule.employed-work-schedule",
+      "mappedBy": "employed"
     }
   }
 }

@@ -24,10 +24,12 @@
       "maxLength": 2,
       "default": "LB",
       "required": true
+    },
+    "employed_work_schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::employed-work-schedule.employed-work-schedule",
+      "mappedBy": "schedule"
     }
-  },
-  "hooks": {
-    "beforeCreate": "lifecycles.beforeCreate",
-    "beforeUpdate": "lifecycles.beforeUpdate"
   }
 }

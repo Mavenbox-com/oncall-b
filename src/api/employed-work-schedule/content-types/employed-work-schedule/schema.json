@@ -4,7 +4,8 @@
   "info": {
     "singularName": "employed-work-schedule",
     "pluralName": "employed-work-schedules",
-    "displayName": "Employed work schedule"
+    "displayName": "Employed work schedule",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,19 +18,18 @@
     },
     "employed": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "required": true
+      "inversedBy": "employed_work_schedules"
     },
     "shift": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::work-shift.work-shift",
-      "required": true
+      "inversedBy": "employed_work_schedules"
     },
     "is_holiday": {
-      "type": "time",
-      "default": false
+      "type": "time"
     },
     "is_day_off": {
       "type": "boolean",
@@ -38,10 +38,12 @@
     "is_changed": {
       "type": "boolean",
       "default": false
+    },
+    "schedule": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::work-schedule.work-schedule",
+      "inversedBy": "employed_work_schedules"
     }
-  },
-  "hooks": {
-    "beforeCreate": "lifecycles.beforeCreate",
-    "beforeUpdate": "lifecycles.beforeUpdate"
   }
 }
