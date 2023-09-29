@@ -31,10 +31,12 @@
     "is_active": {
       "type": "boolean",
       "default": true
+    },
+    "employed_work_schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::employed-work-schedule.employed-work-schedule",
+      "mappedBy": "shift"
     }
-  },
-  "hooks": {
-    "beforeCreate": "lifecycles.beforeCreate",
-    "beforeUpdate": "lifecycles.beforeUpdate"
   }
 }

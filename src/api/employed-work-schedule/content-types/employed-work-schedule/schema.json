@@ -30,19 +30,21 @@
     },
     "employed": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "required": true
+      "inversedBy": "employed_work_schedules"
     },
     "shift": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::work-shift.work-shift",
       "required": true
+    },
+    "schedule": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::work-schedule.work-schedule",
+      "inversedBy": "employed_work_schedules"
     }
-  },
-  "hooks": {
-    "beforeCreate": "lifecycles.beforeCreate",
-    "beforeUpdate": "lifecycles.beforeUpdate"
   }
 }
