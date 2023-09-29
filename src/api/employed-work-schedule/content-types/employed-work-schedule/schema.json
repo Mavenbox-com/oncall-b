@@ -39,10 +39,12 @@
       "relation": "manyToOne",
       "target": "api::work-shift.work-shift",
       "required": true
+    },
+    "schedule": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::work-schedule.work-schedule",
+      "inversedBy": "employed_work_schedules"
     }
-  },
-  "hooks": {
-    "beforeCreate": "lifecycles.beforeCreate",
-    "beforeUpdate": "lifecycles.beforeUpdate"
   }
 }

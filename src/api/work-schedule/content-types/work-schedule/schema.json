@@ -4,7 +4,8 @@
   "info": {
     "singularName": "work-schedule",
     "pluralName": "work-schedules",
-    "displayName": "Work schedule"
+    "displayName": "Work schedule",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
